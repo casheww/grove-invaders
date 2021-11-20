@@ -11,7 +11,7 @@ void oledSetup() {
 void drawGame(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing, int xOffset) {
   oled.firstPage();
   do {
-    int bottomRowDrawY = dHeight - enemyAltitude;
+    int bottomRowDrawY = dHeight - enemyAltitude * enemySpacing;
     for (int y = 0; y < gridHeight; y++) {
       int drawY = bottomRowDrawY - (bottomRow - y) * enemySpacing;
 

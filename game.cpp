@@ -1,9 +1,8 @@
 #include "game.h"
-#include <Arduino.h>
 
 Game::Game() {
   _gridSetup();
-  _enemyAltitude = gridHeight;
+  _enemyAltitude = gridHeight - 1;
   _bottomRow = gridHeight;
   _msForMove = initialMoveDelay;
   _gridOffset_x = 0;
