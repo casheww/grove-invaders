@@ -1,5 +1,6 @@
 #include <U8g2lib.h>
 #include "display.h"
+#include "game.h"
 
 U8G2_SSD1306_128X64_NONAME_2_HW_I2C oled(U8G2_R2);
 
@@ -7,14 +8,19 @@ void oledSetup() {
   oled.begin();
 }
 
-void drawGame(bool* gridPtr){
-  // TODO 
-  
+void drawGame(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing, int xOffset) {
   oled.firstPage();
   do {
-    for (int y = 0; y < 64; y++) {
-      for (int x = 0; x < 128; x+=10) {
-        oled.drawPixel(x, y);
+    int bottomRowDrawY = dHeight - enemyAltitude;
+    for (int y = 0; y < gridHeight; y++) {
+      int drawY = bottomRowDrawY - (bottomRow - y) * enemySpacing;
+
+      int drawX = xOffset;
+      for (int x = 0; x < gridWidth; x++) {
+        if ((*gridPtr) + x + y * gridWidth) {     // retrieve bool value from 2D array... jeez
+          oled.drawPixel(drawX, drawY);
+        }
+        drawX += enemySpacing;
       }
     }
   } while (oled.nextPage());
@@ -22,7 +28,6 @@ void drawGame(bool* gridPtr){
 
 void drawMenu() {
   oled.firstPage();
-  
   do {
     oled.setFont(u8g2_font_7x13_mf);
     oled.drawStr(0, 10, "tiny ");

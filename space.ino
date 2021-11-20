@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include "display.h"
 #include "game.h"
 
@@ -27,7 +26,8 @@ void loop() {
     if (digitalRead(buttonPin)) { currentState = in_game; }   // start game on button press
   }
   else if (currentState == in_game){
-    drawGame(game.getGrid());
+    game.update();
+    drawGame(game.getGridPtr(), game.getBottomRowIndex(), game.getEnemyAltitude(), enemySpacing, game.getGridOffset_x());
   }
   else {
     // TODO : game over
