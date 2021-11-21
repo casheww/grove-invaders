@@ -1,22 +1,40 @@
 #include "game.h"
+#include <Arduino.h>
 
-Game::Game() {
+Game::Game(int displayWidth) {
+  _screenCellWidth = displayWidth / enemySpacing;   // maximum grid width the screen could accommodate
+  
   _gridSetup();
   _enemyAltitude = gridHeight - 1;
   _bottomRow = gridHeight;
-  _msForMove = initialMoveDelay;
+  _updatesFromLastMove = 0;
+  _moveDelay = initialMoveDelay;
   _gridOffset_x = 0;
+  _enemyDirection = 1;    // enemies start moving right. Left is -1
 }
 
 void Game::update() {
   /* TODO
-   * change x-offset of enemy graphics after some time delay
-   *    decrease said time delay on edge collision
-   * change altitude of bottom row on edge collision
    * change _bottomRow on row depletion, like a circular queue
    *    also fill what is now the top row
    * check game over?
    */
+
+  if (_moveDelay < _updatesFromLastMove) {
+    _gridOffset_x += enemySpacing * _enemyDirection / 2;      // move enemies laterally
+    _updatesFromLastMove = 0;
+  }
+  else { _updatesFromLastMove++; }
+
+  if (_checkSideCollision()) {
+    digitalWrite(4, true);
+
+    _enemyAltitude -= 1;
+    _moveDelay *= 0.7;
+    _enemyDirection *= -1;
+  }
+  else { digitalWrite(4, false); }
+  
 }
 
 bool* Game::getGridPtr() {
@@ -41,5 +59,34 @@ void Game::_gridSetup() {
     for (int x = 0; x < gridWidth; x++) {
       _grid[x][y] = true;
     }
+  }
+}
+
+bool Game::_checkSideCollision() {
+  int left = 0;
+  int right = gridWidth - 1;
+  
+  // sign of direction
+  int sign = _enemyDirection < 0 ? -1 : (_enemyDirection == 0 ? 0 : 1);
+
+  int closest;      // get x index of the enemy furthest forward in the direction of travel
+
+  int x = sign == 1 ? right : left;     // start scan on target side
+  while (sign == 1 && x >= left ||
+        sign == -1 && x <= right) {
+    for (int y = 0; y < gridHeight; y++) {
+      if (_grid[x][y]) {
+        closest = x;
+        goto closestBreak;
+      }
+    }
+  }
+  closestBreak:
+
+  if (sign == 1) {
+    return _gridOffset_x / enemySpacing + (closest + 1) * sign >= _screenCellWidth;
+  }
+  else {
+    return _gridOffset_x / enemySpacing + (closest + 1) * sign <= 0;
   }
 }

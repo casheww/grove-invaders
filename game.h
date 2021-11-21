@@ -1,12 +1,12 @@
 
-const int gridWidth = 16;
+const int gridWidth = 10;
 const int gridHeight = 8;
 const int enemySpacing = 8;         // pixels
-const int initialMoveDelay = 1000;  // time between enemies' lateral movement at start of game
+const int initialMoveDelay = 12;    // updates
 
 class Game {
   public:
-    Game();
+    Game(int displayWidth);
     void update();
 
     bool* getGridPtr();
@@ -15,11 +15,16 @@ class Game {
     int getGridOffset_x();
     
   private:
+    int _screenCellWidth;
+  
     // enemies
     void _gridSetup();
+    bool _checkSideCollision();
     bool _grid[gridWidth][gridHeight];
-    int _bottomRow;
     int _enemyAltitude;
-    int _msForMove;
+    int _bottomRow;
+    int _updatesFromLastMove;
+    int _moveDelay;
     int _gridOffset_x;
+    int _enemyDirection;
 };
