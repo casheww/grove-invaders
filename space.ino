@@ -28,9 +28,10 @@ void loop() {
     drawMenu();
     if (digitalRead(buttonPin)) { currentState = in_game; }     // start game on button press
   }
-  else if (currentState == in_game){
-    game.update();
-    drawGame(game.getGridPtr(), game.getBottomRowIndex(), game.getEnemyAltitude(), enemySpacing, game.getGridOffset_x());
+  else if (currentState == in_game) {
+    game.update(analogRead(potPin));
+    
+    drawGame(game.getGridPtr(), game.getBottomRowIndex(), game.getEnemyAltitude(), enemySpacing, game.getGridOffset_x(), game.getPlayerX());
     delay(frameDelay);
 
     if (game.checkGameOver()) { currentState = game_over; }

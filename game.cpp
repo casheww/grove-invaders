@@ -2,6 +2,7 @@
 #include <Arduino.h>
 
 Game::Game(int displayWidth) {
+  _displayWidth = displayWidth;
   _screenCellWidth = displayWidth / enemySpacing;   // maximum grid width the screen could accommodate
   
   _gridSetup();
@@ -11,21 +12,28 @@ Game::Game(int displayWidth) {
   _moveDelay = initialMoveDelay;
   _gridOffset_x = 0;
   _enemyDirection = 1;    // enemies start moving right. Left is -1
+
+  _playerPos = displayWidth / 2;
 }
 
-void Game::update() {
+void Game::update(int potValue) {
   /* TODO
    * change _bottomRow on row depletion, like a circular queue
    *    also fill what is now the top row
+   * shoot when button is pressed
    */
 
+  // set player's lateral position - lerp potentiometer reading
+  _playerPos = _displayWidth * (1 - (potValue / 1023.0));
+
+  // move enemies laterally
   if (_moveDelay < _updatesFromLastMove) {
-    _gridOffset_x += enemySpacing * _enemyDirection / 2;      // move enemies laterally
+    _gridOffset_x += enemySpacing * _enemyDirection / 2;
     _updatesFromLastMove = 0;
   }
   else { _updatesFromLastMove++; }
 
-  // bounce of edges
+  // make enemies bounce off edges
   if (_checkSideCollision()) {
     digitalWrite(4, true);
 
@@ -34,7 +42,6 @@ void Game::update() {
     _enemyDirection *= -1;
   }
   else { digitalWrite(4, false); }
-  
 }
 
 bool Game::checkGameOver() {
@@ -55,6 +62,10 @@ int Game::getEnemyAltitude() {
 
 int Game::getGridOffset_x() {
   return _gridOffset_x;
+}
+
+int Game::getPlayerX() {
+  return _playerPos;
 }
 
 void Game::_gridSetup() {
