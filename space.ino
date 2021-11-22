@@ -26,14 +26,20 @@ void setup() {
 void loop() {
   if (currentState == main_menu) {
     drawMenu();
-    if (digitalRead(buttonPin)) currentState = in_game;     // start game on button press
+    if (digitalRead(buttonPin)) { currentState = in_game; }     // start game on button press
   }
   else if (currentState == in_game){
     game.update();
     drawGame(game.getGridPtr(), game.getBottomRowIndex(), game.getEnemyAltitude(), enemySpacing, game.getGridOffset_x());
     delay(frameDelay);
+
+    if (game.checkGameOver()) { currentState = game_over; }
   }
   else {
-    // TODO : game over
+    drawGameOver();
+    if (digitalRead(buttonPin)) {
+      currentState = in_game;
+      game = Game(dWidth);
+    }
   }
 }

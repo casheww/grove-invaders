@@ -17,7 +17,6 @@ void Game::update() {
   /* TODO
    * change _bottomRow on row depletion, like a circular queue
    *    also fill what is now the top row
-   * check game over?
    */
 
   if (_moveDelay < _updatesFromLastMove) {
@@ -26,6 +25,7 @@ void Game::update() {
   }
   else { _updatesFromLastMove++; }
 
+  // bounce of edges
   if (_checkSideCollision()) {
     digitalWrite(4, true);
 
@@ -35,6 +35,10 @@ void Game::update() {
   }
   else { digitalWrite(4, false); }
   
+}
+
+bool Game::checkGameOver() {
+  return _enemyAltitude <= 0;
 }
 
 bool* Game::getGridPtr() {

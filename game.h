@@ -2,12 +2,13 @@
 const int gridWidth = 10;
 const int gridHeight = 8;
 const int enemySpacing = 8;         // pixels
-const int initialMoveDelay = 12;    // updates
+const int initialMoveDelay = 4;     // updates
 
 class Game {
   public:
     Game(int displayWidth);
     void update();
+    bool checkGameOver();
 
     bool* getGridPtr();
     int getBottomRowIndex();

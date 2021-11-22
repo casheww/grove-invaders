@@ -29,9 +29,19 @@ void drawGame(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing,
 void drawMenu() {
   oled.firstPage();
   do {
-    oled.setFont(u8g2_font_7x13_mf);
+    oled.setFont(u8g2_font_t0_14_mf);
     oled.drawStr(0, 10, "tiny ");
     oled.drawStr(0, 24, "space invaders");
+    oled.setFont(u8g2_font_6x13O_mf);
+    oled.drawStr(0, 45, "press button");
+  } while (oled.nextPage());
+}
+
+void drawGameOver() {
+  oled.firstPage();
+  do {
+    oled.setFont(u8g2_font_t0_18_mf);
+    oled.drawStr(0, 15, "game over");
     oled.setFont(u8g2_font_6x13O_mf);
     oled.drawStr(0, 45, "press button");
   } while (oled.nextPage());
