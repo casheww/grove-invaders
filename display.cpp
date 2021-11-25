@@ -4,10 +4,12 @@
 U8G2_SSD1306_128X64_NONAME_2_HW_I2C oled(U8G2_R2);
 
 int gridWidth, gridHeight;
+int buzzerUpdateCounter = 0;
 
 void outSetup(int gWidth, int gHeight) {
   oled.begin();
   pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
 
   gridWidth = gWidth;
   gridHeight = gHeight;
@@ -15,6 +17,21 @@ void outSetup(int gWidth, int gHeight) {
 
 void setLED(bool _on) {
   digitalWrite(ledPin, _on);
+}
+
+void playBuzzer(int updates, int pitch) {
+  analogWrite(buzzerPin, pitch);
+  buzzerUpdateCounter = updates;
+  
+}
+
+void updateBuzzer() {
+  if (buzzerUpdateCounter > 0) {
+    buzzerUpdateCounter--;
+  }
+  else {
+    analogWrite(buzzerPin, 0);
+  }
 }
 
 void drawEnemies(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing, int enemiesX);

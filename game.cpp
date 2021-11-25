@@ -31,6 +31,7 @@ void Game::update(float potFloat, bool buttonPressed) {
   if (buttonPressed && !_projectileAlive) {
     _shoot();
     _projectileAlive = true;
+    playBuzzer(1, 192);
   }
   else {
     _updateProjectile();
@@ -63,6 +64,7 @@ void Game::_moveEnemies() {
   // make enemies bounce off edges
   if (_checkSideCollision()) {
     setLED(true);
+    playBuzzer(1, 10);
 
     _enemyAltitude -= 1;
     _moveDelay *= 0.7;

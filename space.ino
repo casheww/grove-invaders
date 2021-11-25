@@ -22,6 +22,8 @@ void setup() {
 }
 
 void loop() {
+  updateBuzzer();
+  
   if (currentState == main_menu) {
     drawMenu();
     if (digitalRead(buttonPin)) { currentState = in_game; }     // start game on button press
