@@ -1,11 +1,20 @@
 #include <U8g2lib.h>
 #include "display.h"
-#include "game.h"
 
 U8G2_SSD1306_128X64_NONAME_2_HW_I2C oled(U8G2_R2);
 
-void oledSetup() {
+int gridWidth, gridHeight;
+
+void setLED(bool _on) {
+  digitalWrite(ledPin, _on);
+}
+
+void outSetup(int gWidth, int gHeight) {
   oled.begin();
+  pinMode(ledPin, OUTPUT);
+
+  gridWidth = gWidth;
+  gridHeight = gHeight;
 }
 
 void drawEnemies(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing, int enemiesX);

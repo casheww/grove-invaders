@@ -1,9 +1,8 @@
 
 const int gridWidth = 10;
 const int gridHeight = 8;
-const int enemySpacing = 8;         // pixels
-const int initialMoveDelay = 4;     // updates
-const int playerVertices[3][2] = { {-3, 63}, {3, 63}, {0, 58} };
+const int enemySpacing = 8;           // pixels
+const int initialMoveDelay = 4;       // updates
 
 class Game {
   public:

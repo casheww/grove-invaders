@@ -1,5 +1,5 @@
+#include "display.h"
 #include "game.h"
-#include <Arduino.h>
 
 Game::Game(int displayWidth) {
   _displayWidth = displayWidth;
@@ -35,7 +35,7 @@ void Game::update(int potValue) {
 
   // make enemies bounce off edges
   if (_checkSideCollision()) {
-    digitalWrite(4, true);
+    setLED(true);
 
     _enemyAltitude -= 1;
     _moveDelay *= 0.7;
@@ -75,6 +75,7 @@ void Game::_gridSetup() {
       _grid[x][y] = true;
     }
   }
+  else { setLED(false); }
 }
 
 bool Game::_checkSideCollision() {
