@@ -5,10 +5,6 @@ U8G2_SSD1306_128X64_NONAME_2_HW_I2C oled(U8G2_R2);
 
 int gridWidth, gridHeight;
 
-void setLED(bool _on) {
-  digitalWrite(ledPin, _on);
-}
-
 void outSetup(int gWidth, int gHeight) {
   oled.begin();
   pinMode(ledPin, OUTPUT);
@@ -17,14 +13,20 @@ void outSetup(int gWidth, int gHeight) {
   gridHeight = gHeight;
 }
 
+void setLED(bool _on) {
+  digitalWrite(ledPin, _on);
+}
+
 void drawEnemies(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing, int enemiesX);
 void drawPlayer(int x);
+void drawProjectile(int x, int y);
 
-void drawGame(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing, int enemiesX, int playerX) {
+void drawGame(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing, int enemiesX, int playerX, int* projectilePtr) {
   oled.firstPage();
   do {
     drawEnemies(gridPtr, bottomRow, enemyAltitude, enemySpacing, enemiesX);
     drawPlayer(playerX);
+    drawProjectile(*projectilePtr, *(projectilePtr + 1));
   } while (oled.nextPage());
 }
 
@@ -68,5 +70,13 @@ void drawEnemies(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpaci
 }
 
 void drawPlayer(int x) {
-  oled.drawTriangle(playerVertices[0][0] + x, playerVertices[0][1], playerVertices[1][0] + x, playerVertices[1][1], playerVertices[2][0] + x, playerVertices[2][1]);
+  oled.drawTriangle(
+    playerVertices[0][0] + x, playerVertices[0][1],
+    playerVertices[1][0] + x, playerVertices[1][1],
+    playerVertices[2][0] + x, playerVertices[2][1]
+  );
+}
+
+void drawProjectile(int x, int y) {
+  oled.drawPixel(x, y);
 }

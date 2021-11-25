@@ -3,11 +3,12 @@ const int gridWidth = 10;
 const int gridHeight = 8;
 const int enemySpacing = 8;           // pixels
 const int initialMoveDelay = 4;       // updates
+const int projectileSpeed = 4;        // pixels per update
 
 class Game {
   public:
     Game(int displayWidth);
-    void update(int potValue);
+    void update(float potFloat, bool buttonPressed);
     bool checkGameOver();
 
     bool* getGridPtr();
@@ -16,6 +17,7 @@ class Game {
     int getGridOffset_x();
 
     int getPlayerX();
+    int* getProjectilePtr();
     
   private:
     int _displayWidth;
@@ -23,6 +25,7 @@ class Game {
   
     // enemies
     void _gridSetup();
+    void _moveEnemies();
     bool _checkSideCollision();
     bool _grid[gridWidth][gridHeight];
     int _enemyAltitude;
@@ -33,6 +36,10 @@ class Game {
     int _enemyDirection;
 
     // player
+    void _shoot();
+    void _updateProjectile();
     int _playerPos;
+    int _projectile[2];
+    bool _projectileAlive;
     
 };

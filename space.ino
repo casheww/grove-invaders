@@ -2,7 +2,6 @@
 #include "game.h"
 
 const int potPin = A0;
-const int ledPin = 4;
 const int buttonPin = 6;
 
 const int fps = 25;
@@ -16,10 +15,9 @@ Game game(dWidth);
 void setup() {
   Serial.begin(9600);
   pinMode(potPin, INPUT);
-  pinMode(ledPin, OUTPUT);
   pinMode(buttonPin, INPUT);
 
-  oledSetup();
+  outSetup(gridWidth, gridHeight);
   currentState = main_menu;
 }
 
@@ -29,9 +27,10 @@ void loop() {
     if (digitalRead(buttonPin)) { currentState = in_game; }     // start game on button press
   }
   else if (currentState == in_game) {
-    game.update(analogRead(potPin));
+    game.update(1 - (analogRead(potPin) / 1023.0), digitalRead(buttonPin));
     
-    drawGame(game.getGridPtr(), game.getBottomRowIndex(), game.getEnemyAltitude(), enemySpacing, game.getGridOffset_x(), game.getPlayerX());
+    drawGame(game.getGridPtr(), game.getBottomRowIndex(), game.getEnemyAltitude(), enemySpacing, game.getGridOffset_x(), game.getPlayerX(), game.getProjectilePtr());
+    
     delay(frameDelay);
 
     if (game.checkGameOver()) { currentState = game_over; }
