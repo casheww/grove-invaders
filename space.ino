@@ -31,7 +31,8 @@ void loop() {
   else if (currentState == in_game) {
     game.update(1 - (analogRead(potPin) / 1023.0), digitalRead(buttonPin));
     
-    drawGame(game.getGridPtr(), game.getBottomRowIndex(), game.getEnemyAltitude(), enemySpacing, game.getGridOffset_x(), game.getPlayerX(), game.getProjectilePtr());
+    drawGame(game.getGridPtr(), game.getBottomRowIndex(), game.getEnemyAltitude(), enemySpacing, game.getGridOffset_x(),
+      game.getPlayerX(), game.getProjectileAlive(), game.getProjectilePtr());
     
     delay(frameDelay);
 

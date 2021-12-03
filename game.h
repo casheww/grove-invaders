@@ -18,6 +18,7 @@ class Game {
 
     int getPlayerX();
     int* getProjectilePtr();
+    bool getProjectileAlive();
     
   private:
     int _displayWidth;
@@ -26,6 +27,7 @@ class Game {
     // enemies
     void _gridSetup();
     void _moveEnemies();
+    bool _checkHitEnemy(int x, int y);
     bool _checkSideCollision();
     bool _grid[gridWidth][gridHeight];
     int _enemyAltitude;
@@ -41,5 +43,6 @@ class Game {
     int _playerPos;
     int _projectile[2];
     bool _projectileAlive;
+    int _toKill[2];
     
 };

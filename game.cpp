@@ -1,5 +1,6 @@
 #include "display.h"
 #include "game.h"
+#include <Arduino.h>
 
 Game::Game(int displayWidth) {
   _displayWidth = displayWidth;
@@ -21,7 +22,6 @@ void Game::update(float potFloat, bool buttonPressed) {
   /* TODO
    * change _bottomRow on row depletion, like a circular queue
    *    also fill what is now the top row
-   * shoot when button is pressed
    */
 
   // set player's lateral position - lerp potentiometer reading
@@ -77,10 +77,36 @@ void Game::_updateProjectile() {
   if (_projectile[1] < 0) {
     _projectileAlive = false;
   }
-  else {
+  else if (_projectileAlive && _checkHitEnemy(_projectile[0], _projectile[1])) {
+    _projectileAlive = false;
+    _grid[_toKill[0]][_toKill[1]] = false;
+    //playBuzzer(1, 100);
+  }
+   
+  if (_projectileAlive) {
     // move projectile upwards on the screen -> decrease y pos
     _projectile[1] = _projectile[1] - projectileSpeed;
   }
+}
+
+bool Game::_checkHitEnemy(int x, int y) {
+  float margin = 0.5;
+  float relX = (x - _gridOffset_x) / (float)gridWidth;
+  float relY = (y - (dHeight - _enemyAltitude)) / (float)enemySpacing + getBottomRowIndex();
+
+  Serial.println(relX);
+  Serial.println(relY);
+  Serial.println();
+
+  if (abs((int)relX - relX) > margin || abs((int)relY - relY) > margin ||
+      relX < 0 || relX >= gridWidth ||
+      relY < 0 || relY >= gridHeight) { return false; }
+
+  _toKill[0] = (int)relX;
+  _toKill[1] = (int)relY;
+  return true;
+  
+  // todo
 }
 
 bool Game::_checkSideCollision() {
@@ -118,6 +144,10 @@ bool Game::checkGameOver() {
 
 bool* Game::getGridPtr() {
   return &_grid[0][0];
+}
+
+bool Game::getProjectileAlive() {
+  return _projectileAlive;
 }
 
 int Game::getBottomRowIndex() {

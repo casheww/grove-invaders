@@ -38,12 +38,12 @@ void drawEnemies(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpaci
 void drawPlayer(int x);
 void drawProjectile(int x, int y);
 
-void drawGame(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing, int enemiesX, int playerX, int* projectilePtr) {
+void drawGame(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing, int enemiesX, int playerX, bool projectileAlive, int* projectilePtr) {
   oled.firstPage();
   do {
     drawEnemies(gridPtr, bottomRow, enemyAltitude, enemySpacing, enemiesX);
     drawPlayer(playerX);
-    drawProjectile(*projectilePtr, *(projectilePtr + 1));
+    if (projectileAlive) { drawProjectile(*projectilePtr, *(projectilePtr + 1)); }
   } while (oled.nextPage());
 }
 
@@ -78,7 +78,7 @@ void drawEnemies(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpaci
 
     int drawX = enemiesX;
     for (int x = 0; x < gridWidth; x++) {
-      if ((*gridPtr) + x + y * gridWidth) {     // retrieve bool value from 2D array... jeez
+      if (*(gridPtr + x + y * gridWidth)) {     // retrieve bool value from 2D array... jeez
         oled.drawPixel(drawX, drawY);
       }
       drawX += enemySpacing;

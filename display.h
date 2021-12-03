@@ -10,6 +10,6 @@ void playBuzzer(int updates, int pitch);
 void updateBuzzer();
 
 void outSetup(int gWidth, int gHeight);
-void drawGame(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing, int enemiesX, int playerX, int* projectilePtr);
+void drawGame(bool* gridPtr, int bottomRow, int enemyAltitude, int enemySpacing, int enemiesX, int playerX, bool projectileAlive, int* projectilePtr);
 void drawMenu();
 void drawGameOver();
